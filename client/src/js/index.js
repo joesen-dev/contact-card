@@ -1,6 +1,5 @@
 // Import modules
 import { toggleForm, clearForm } from "./form";
-// import "./submit";
 import { initDb, getDb, postDb, deleteDb, editDb } from "./database";
 import { fetchCards } from "./cards";
 
