@@ -14,15 +14,14 @@ export const initDb = async () => {
       // Create new object store for the data and give it a key name of 'id' which will increment automatically
       db.createObjectStore("contacts", { keyPath: "id", autoIncrement: true });
       console.log("contacts store created");
+      {
+        // Create new transaction and specify the database and data privileges
+        const tx = db.transaction("contacts", "readwrite");
+        // Open up the desired object store.
+        const store = tx.objectStore("contacts");
+      }
     },
   });
-
-  {
-    // Create new transaction and specify the database and data privileges
-    const tx = db.transaction("contacts", "readwrite");
-    // Open up the desired object store.
-    const store = tx.objectStore("contacts");
-  }
 };
 
 // Export a function we will use to GET to the database.
@@ -62,6 +61,53 @@ export const postDb = async (name, email, phone, profile) => {
 
   // Use the .add() method on the store and pass in the content.
   const request = store.add({
+    name: name,
+    email: email,
+    phone: phone,
+    profile: profile,
+  });
+
+  // Get confirmation of the request.
+  const result = await request;
+  console.log("🚀 - data saved to the database", result);
+};
+
+export const deleteDb = async (id) => {
+  console.log("DELETE from the database", id);
+
+  // Create a connection to the IndexedDB database and the version we want to use.
+  const contactDb = await openDB("contact_db", 1);
+
+  // Create a new transaction and specify the store and data privileges.
+  const tx = contactDb.transaction("contacts", "readwrite");
+
+  // Open up the desired object store.
+  const store = tx.objectStore("contacts");
+
+  // Use the .delete() method to get all data in the datebase.
+  const request = store.delete(id);
+
+  // Get confirmation of the request.
+  const result = await request;
+  console.log("result.value", result);
+  return result?.value;
+};
+
+export const editDb = async (id, name, email, phone, profile) => {
+  console.log("PUT to the database");
+
+  // Create a connection to the IndexedDB database and the version we want to use.
+  const contactDb = await openDB("contact_db", 1);
+
+  // Create a new transaction and specify the store and data privileges.
+  const tx = contactDb.transaction("contacts", "readwrite");
+
+  // Open up the desired object store.
+  const store = tx.objectStore("contacts");
+
+  // Use the .put() method to edit a card in the database
+  const request = store.put({
+    id: id,
     name: name,
     email: email,
     phone: phone,
