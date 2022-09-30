@@ -2,7 +2,7 @@
 import { openDB } from "idb";
 import "regenerator-runtime/runtime";
 
-export const initDb = async () => {
+export const initdb = async () => {
   // create new database named 'contact_db' which will be using version 1 of the database.
   openDB("contact_db", 1, {
     // Add database schema if it has not already been initialized.
@@ -14,15 +14,17 @@ export const initDb = async () => {
       // Create new object store for the data and give it a key name of 'id' which will increment automatically
       db.createObjectStore("contacts", { keyPath: "id", autoIncrement: true });
       console.log("contacts store created");
-      {
-        // Create new transaction and specify the database and data privileges
-        const tx = db.transaction("contacts", "readwrite");
-        // Open up the desired object store.
-        const store = tx.objectStore("contacts");
-      }
+      // {
+      //   // Create new transaction and specify the database and data privileges
+      //   const tx = db.transaction("contacts", "readwrite");
+      //   // Open up the desired object store.
+      //   const store = tx.objectStore("contacts");
+      // }
     },
   });
 };
+
+// Exported READ function
 
 // Export a function we will use to GET to the database.
 export const getDb = async () => {
@@ -45,6 +47,8 @@ export const getDb = async () => {
   console.log("result.value", result);
   return result;
 };
+
+// EXPORTED CREATE function
 
 // Export a function we will use to POST to the database.
 export const postDb = async (name, email, phone, profile) => {
@@ -71,6 +75,8 @@ export const postDb = async (name, email, phone, profile) => {
   const result = await request;
   console.log("🚀 - data saved to the database", result);
 };
+
+// EXPORTED DELETE function
 
 export const deleteDb = async (id) => {
   console.log("DELETE from the database", id);
