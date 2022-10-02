@@ -1,7 +1,7 @@
 // Import modules
-import { toggleForm, clearForm } from "./form";
-import { initdb, getDb, postDb, deleteDb, editDb } from "./database";
+import { initdb, postDb, deleteDb, editDb } from "./database";
 import { fetchCards } from "./cards";
+import { toggleForm, clearForm } from "./form";
 
 // Import CSS files
 import "../css/index.css";
@@ -15,7 +15,7 @@ import Logo from "../images/logo.png";
 import Bear from "../images/bear.png";
 import Dog from "../images/dog.png";
 
-// Add images on load
+// On load functionality
 window.addEventListener("load", function () {
   initdb();
   fetchCards();
@@ -98,3 +98,11 @@ window.editCard = (e) => {
   // Toggles the Submit button so that it now Updates an existing contact instead of posting a new one
   submitBtnToUpdate = true;
 };
+
+// register the service worker
+if ("serviceWorker" in navigator) {
+  // Use the window load event to keep the page load performant
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("./service-worker.js");
+  });
+}
