@@ -27,8 +27,25 @@ window.addEventListener("load", function () {
 // Form functionality
 const form = document.getElementById("formToggle");
 const newContactButton = document.getElementById("new-contact");
+// Install button
+const installBtn = document.getElementById("installBtn");
 let submitBtnToUpdate = false;
 let profileId;
+
+window.addEventListener("beforeinstallprompt", (event) => {
+  event.preventDefault();
+  installBtn.style.visibility = "visible";
+
+  installBtn.addEventListener("click", () => {
+    event.prompt();
+    installBtn.setAttribute("disabled", true);
+    installBtn.textContent = "Installed!";
+  });
+});
+
+window.addEventListener("appinstalled", (event) => {
+  console.log("👍", "appinstalled", event);
+});
 
 newContactButton.addEventListener("click", (event) => {
   toggleForm();
